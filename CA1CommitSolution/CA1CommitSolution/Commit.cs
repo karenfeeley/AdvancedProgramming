@@ -8,6 +8,8 @@ namespace CA1CommitSolution
 {
     class Commit
     {
+        
+
         //Properties
         public string RevisionNo { get; set; }
         public string Name { get; set; }
@@ -38,12 +40,10 @@ namespace CA1CommitSolution
             sb.Append(DateLog + ",");
             sb.Append(Line + ",");
             sb.Append(Comment + ",");
-            sb.Append(Changes + ",");
-
+            sb.Append(Changes); //no comma in last item
+            
             return sb.ToString();
 
         }
-
-
     }
 }

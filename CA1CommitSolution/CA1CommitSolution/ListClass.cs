@@ -8,6 +8,8 @@ namespace CA1CommitSolution
 {
     class ListClass
     {
+        
+
         internal List<Commit> commitList = new List<Commit>();
 
         public void AddItemsToList(string revNo, string nme, string date, int ln, string chg, string cmt)
@@ -17,9 +19,5 @@ namespace CA1CommitSolution
 
             commitList.Add(commit);
         }
-
-
-
-
     }
 }
