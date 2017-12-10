@@ -9,13 +9,9 @@ namespace CA1CommitSolution
 {
     class Program
     {
-       
-
-
         static readonly string filePathSrc = Environment.GetFolderPath
-                                (Environment.SpecialFolder.MyDocuments)
-                                + Path.DirectorySeparatorChar + "commit_changes.txt";
-
+                                 (Environment.SpecialFolder.MyDocuments)
+                                 + Path.DirectorySeparatorChar + "commit_changes.txt";
         static string filePathDes
         {
             get
@@ -32,10 +28,14 @@ namespace CA1CommitSolution
             {
                 //Variables
                 int linecount = 0;
-                //Instantiating
+                //Instantiating listclass
                 ListClass cl = new ListClass();
+
                 //Reading the file and creating an array of lines.
                 string[] lines = File.ReadAllLines(filePathSrc);
+
+                //Adding file headings
+                cl.AddItemsToList("Revision_No", "Author_Name", "Date_Time", 0, "Changed_Paths", "Comments");
 
                 while (linecount < lines.Length)
                 {
@@ -46,30 +46,15 @@ namespace CA1CommitSolution
                         int noOfComms = GetNumber(commitprop[3]);
 
                         linecount++; //moving to the next line
-                        StringBuilder cp = new StringBuilder();//changepaths object
+
+                        //Instantiating stringbuilder objects to hold the data
+                        StringBuilder cp = new StringBuilder();//1st changepaths object
                         StringBuilder cp1 = new StringBuilder();//2nd changepaths object - limited cell capacity in excel
                         StringBuilder comms = new StringBuilder();//comments object
 
                         if (lines[linecount].IndexOf(':') == 13)//validating linecount is @ changedPaths:
                         {
-                            linecount++;
-                            while (lines[linecount] != "" && cp.Length < 30000)
-                            {
-                                lines[linecount] = lines[linecount].Trim();
-                                cp.Append(string.Format($"\"{lines[linecount]}\""));
-                                linecount++;
-                            }
-                            if (cp.Length >= 30000)
-                            {
-                                while (lines[linecount] != "")
-                                {
-
-                                    lines[linecount] = lines[linecount].Trim();
-                                    cp1.Append(string.Format($"\"{lines[linecount]}\""));
-                                    linecount++;
-                                }
-                                cl.AddItemsToList(commitprop[0], commitprop[1], "", noOfComms, cp1.ToString(), "\"**Duplicate record - ChangedPaths cellOverCapacity**\"");
-                            }
+                            linecount = ConvertBlock1(linecount, cl, lines, commitprop, noOfComms, cp, cp1);
                         }
                         else
                         {
@@ -79,14 +64,12 @@ namespace CA1CommitSolution
                                 linecount++;
                             }
                         }
-                        linecount++;
-                        for (int i = linecount; i < (linecount + noOfComms); i++)
-                        {
-                            lines[i] = lines[i].Trim();
-                            comms.Append(string.Format($"\"{lines[i]}\""));
-                        }
+                        linecount++;//moving to the next line
 
-                        //adding commit properties to the commitList
+                        //creating the comments datablock
+                        ConvertBlock2(linecount, lines, noOfComms, comms);
+
+                        //adding data to the commitList
                         cl.AddItemsToList(commitprop[0], commitprop[1], commitprop[2], noOfComms, cp.ToString(), comms.ToString());
                     }
                     else
@@ -94,26 +77,17 @@ namespace CA1CommitSolution
                         linecount++;
                     }
                 }
-
-            //toDo: Console writeline in final version
-            foreach (Commit c in cl.commitList)
-            {
-                Console.WriteLine(c.ToString()); //override ToString Method
-            }
-            Console.ReadLine();
-            //Write the list out to a new file "Commit-Output.csv"
-            CreateCommitFile(cl.commitList);
-
+                //Write the list out to a new file "Commit-Output_datatime.csv"
+                CreateCommitFile(cl.commitList);
             }
             catch (FileNotFoundException)
             {
-
-                Console.WriteLine("File not found error");
+                Console.WriteLine($"File not found error: {filePathSrc}");
             }
-
         }
 
-        //Methods
+
+        //Methods - Convert 1stline
         static string[] ConvertLine1(string ln)
         {
             //defining the delimiter
@@ -130,10 +104,10 @@ namespace CA1CommitSolution
             {
                 commitProp[j] = commitProp[j].Trim();
             }
-
             return commitProp;
         }
 
+        //Get number of comments in each block of code
         static int GetNumber(string commsNbr)
         {
             int loc = commsNbr.IndexOf("line");
@@ -142,14 +116,52 @@ namespace CA1CommitSolution
             return nmbr;
         }
 
+        //Convert first block of code - starting at "ChangedPaths:"
+        private static int ConvertBlock1(int linecount, ListClass cl, string[] lines, string[] commitprop,
+                                        int noOfComms, StringBuilder cp, StringBuilder cp1)
+        {
+            linecount++;
+            while (lines[linecount] != "" && cp.Length < 30000)
+            {
+                lines[linecount] = lines[linecount].Trim();
+                lines[linecount] = lines[linecount].Replace(",", "");//removing any commas for csv output
+                //adding " between lines to allow for multiline separation in the future
+                cp.Append(string.Format($"\"{lines[linecount]}\""));
+                linecount++;
+            }
+            if (cp.Length >= 30000)
+            {
+                while (lines[linecount] != "")
+                {
+                    lines[linecount] = lines[linecount].Trim();
+                    cp1.Append(string.Format($"\"{lines[linecount]}\""));
+                    linecount++;
+                }
+                cl.AddItemsToList(string.Format($"{commitprop[0]}a"), commitprop[1], commitprop[2], noOfComms, cp1.ToString(),
+                                string.Format($"{commitprop[0]}:Additional record - ChangedPaths cellsize_OverCapacity"));
+            }
+            return linecount;
+        }
+
+        //Creating Comments block of code
+        private static void ConvertBlock2(int linecount, string[] lines, int noOfComms, StringBuilder comms)
+        {
+            for (int i = linecount; i < (linecount + noOfComms); i++)
+            {
+                lines[i] = lines[i].Trim();
+                lines[i] = lines[i].Replace(",", "");//removing any commas for csv output
+                //adding " between lines to allow for multiline separation in the future
+                comms.Append(string.Format($"\"{lines[i]}\""));
+            }
+        }
+
+        //Creating the CsvOutput file
         private static void CreateCommitFile(List<Commit> outPutlist)
         {
-
             if (File.Exists(filePathDes))
             {
                 File.Delete(filePathDes);
             }
-
             else if (!File.Exists(filePathDes))
             {
                 using (FileStream fstream = File.Create(filePathDes))

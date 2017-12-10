@@ -8,8 +8,6 @@ namespace CA1CommitSolution
 {
     class Commit
     {
-        
-
         //Properties
         public string RevisionNo { get; set; }
         public string Name { get; set; }
@@ -17,7 +15,6 @@ namespace CA1CommitSolution
         public int Line { get; set; }
         public string Changes { get; set; }
         public string Comment { get; set; }
-
 
         //6 Parameter required Constructor
         public Commit(string revisionNo, string name, string dateLog, int lineNbr, string changes, string comment)
@@ -30,7 +27,6 @@ namespace CA1CommitSolution
             Comment = comment;
         }
 
-
         //Method - stringbuilder object in csv format.
         public override string ToString()
         {
@@ -41,9 +37,8 @@ namespace CA1CommitSolution
             sb.Append(Line + ",");
             sb.Append(Comment + ",");
             sb.Append(Changes); //no comma in last item
-            
-            return sb.ToString();
 
+            return sb.ToString();
         }
     }
 }
