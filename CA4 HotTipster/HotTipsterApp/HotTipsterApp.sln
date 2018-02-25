@@ -1,0 +1,31 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio 15
+VisualStudioVersion = 15.0.27130.2036
+MinimumVisualStudioVersion = 10.0.40219.1
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "HotTipsterUI", "HotTipsterApp\HotTipsterUI.csproj", "{5E36BD01-33AC-4FC7-8076-363CE88AE34D}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "UnitTestHotTipsterApp", "UnitTestHotTipsterApp\UnitTestHotTipsterApp.csproj", "{0AB640F0-9424-4C51-84F7-E4B9098BDE47}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{5E36BD01-33AC-4FC7-8076-363CE88AE34D}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{5E36BD01-33AC-4FC7-8076-363CE88AE34D}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{5E36BD01-33AC-4FC7-8076-363CE88AE34D}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{5E36BD01-33AC-4FC7-8076-363CE88AE34D}.Release|Any CPU.Build.0 = Release|Any CPU
+		{0AB640F0-9424-4C51-84F7-E4B9098BDE47}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{0AB640F0-9424-4C51-84F7-E4B9098BDE47}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{0AB640F0-9424-4C51-84F7-E4B9098BDE47}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{0AB640F0-9424-4C51-84F7-E4B9098BDE47}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(ExtensibilityGlobals) = postSolution
+		SolutionGuid = {EDCE179F-BFA4-45D4-B07F-F24D300FB582}
+	EndGlobalSection
+EndGlobal
